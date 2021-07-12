@@ -15,7 +15,7 @@ def check_database(chat_id):
 
 
 def check_table(chat_id, database_name):
-    database = client[database_name]
+    database = client[str(database_name)]
     table = database.list_collection_names()
     if chat_id in table:
         error_code.return_error(1002)
@@ -24,16 +24,25 @@ def check_table(chat_id, database_name):
         return True
 
 
-def make_table(chat_id, database_name):
-    database = client[database_name]
-    new_table = database[chat_id]
+def check_data(database_name, chat_id, data):
+    database = client[str(database_name)]
+    table = database[str(chat_id)]
+    # print(table.find_one({"_id": data['_id']})['_id'])
+    if table is not None and data['_id'] == table.find_one({"_id": data['_id']})['_id']:
+        error_code.return_error(1003)
+        return False
+    else:
+        return True
 
 
-def write_data(database_name, chat_id, user_id, get_score, time):
-    data_dict = {chat_id, user_id, get_score, time}
-    if check_table(chat_id, database_name) and check_database(chat_id):
-        database = client[database_name]
-        table = database[chat_id]
+# def make_table(chat_id, database_name):
+#     database = client[database_name]
+#     new_table = database[chat_id]
+
+
+def write_data(database_name, chat_id, data):
+    if check_table(chat_id, database_name) and check_database(chat_id) and check_data(database_name, chat_id, data):
+        database = client[str(database_name)]
+        table = database[str(chat_id)]
         # 插入数据
-        table.insert_one(data_dict)
-
+        table.insert_one(data)
