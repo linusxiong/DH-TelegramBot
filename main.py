@@ -5,9 +5,10 @@ plugins = dict(
     root="plugins",
     include=[
         "auto_kick_people",
-        "write_all_group_member_database",
+        "init_database",
         "help",
-        "banme"
+        "banme",
+        "other"
     ]
 )
 app = Client(
@@ -17,4 +18,5 @@ app = Client(
     api_hash=api_hash,
     plugins=plugins
 )
+
 app.run()

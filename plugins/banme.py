@@ -4,10 +4,10 @@ from pyrogram import Client, filters
 from pyrogram.errors import ChatAdminRequired
 from pyrogram.types import ChatPermissions
 
-from config import BanMeReplayAddress
+from config import BanMeReplayAddress, BOT_NAME
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['banme']))
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['banme', 'banme@{bot_name}'.format(bot_name=BOT_NAME)]))
 def banme(client, message):
     random_time = random.randint(100, 500)
     block_time = int(time() + random_time)
@@ -18,13 +18,18 @@ def banme(client, message):
         can_send_polls=False
     )
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status != "member":
-        message.reply_photo(photo=BanMeReplayAddress)
+    if user.status in ('administrator', 'creator'):
+        reply_message = message.reply_photo(photo=BanMeReplayAddress)
+        sleep(5)
+        reply_message.delete()
+        message.delete()
     else:
         try:
-            send_message = message.reply_text("恭喜您获得" + str(block_time) + "秒禁言时间")
+            send_message = message.reply_text("恭喜您获得" + str(random_time) + "秒禁言时间")
             client.restrict_chat_member(message.chat.id, message.from_user.id, permission, block_time)
         except ChatAdminRequired:
             send_message.edit("❗**无管理权限，请授予管理权限**")
-            sleep(1)
+
+        sleep(5)
         send_message.delete()
+        message.delete()

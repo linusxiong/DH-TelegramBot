@@ -4,11 +4,13 @@ from pyrogram.errors import FloodWait
 from pyrogram.errors.exceptions.forbidden_403 import ChatWriteForbidden
 from pyrogram.errors.exceptions.bad_request_400 import ChatAdminRequired, UserAdminInvalid
 
+from config import BOT_NAME
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['auto_kick']))
+
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['auto_kick', 'auto_kick@{bot_name}'.format(bot_name=BOT_NAME)]))
 def auto_kick(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status == "creator" or "administrator":
+    if user.status in ('administrator', 'creator'):
         if len(message.command) > 1:
             input_str = message.command
             sent_message = message.reply_text("🚮**删除不活跃成员需要一定时间**")
@@ -38,10 +40,10 @@ def auto_kick(client, message):
         sent_message.delete()
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['kick_deleted']))
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['kick_deleted', 'kick_deleted@{bot_name}'.format(bot_name=BOT_NAME)]))
 def kick_deleted(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status == "creator" or "administrator":
+    if user.status in ('administrator', 'creator'):
         sent_message = message.reply_text("🚮**删除不活跃成员需要一定时间**")
         count = 0
         for member in client.iter_chat_members(message.chat.id):
@@ -67,8 +69,8 @@ def kick_deleted(client, message):
         sent_message.delete()
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['status']))
-def status(client, message):
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['group_status', 'group_status@{bot_name}'.format(bot_name=BOT_NAME)]))
+def group_status(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
     if user.status in ('administrator', 'creator'):
         sent_message = message.reply_text("**信息查询中**")
