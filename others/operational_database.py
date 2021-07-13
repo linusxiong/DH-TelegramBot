@@ -27,17 +27,11 @@ def check_table(chat_id, database_name):
 def check_data(database_name, chat_id, data):
     database = client[str(database_name)]
     table = database[str(chat_id)]
-    # print(table.find_one({"_id": data['_id']})['_id'])
     if table is not None and data['_id'] == table.find_one({"_id": data['_id']})['_id']:
         error_code.return_error(1003)
         return False
     else:
         return True
-
-
-# def make_table(chat_id, database_name):
-#     database = client[database_name]
-#     new_table = database[chat_id]
 
 
 def write_data(database_name, chat_id, data):
@@ -46,3 +40,8 @@ def write_data(database_name, chat_id, data):
     # 插入数据
     table.insert_many(data)
 
+
+def update_data(database_name, chat_id, data):
+    database = client[str(database_name)]
+    table = database[str(chat_id)]
+    table.update_many(data)

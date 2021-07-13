@@ -17,7 +17,10 @@ def banme(client, message):
         can_send_stickers=False,
         can_send_polls=False
     )
-    user = client.get_chat_member(message.chat.id, message.from_user.id)
+    if message.from_user.id is None:
+        message.reply_text("")
+    else:
+        user = client.get_chat_member(message.chat.id, message.from_user.id)
     try:
         if user.status in ('administrator', 'creator'):
             reply_message = message.reply_photo(photo=BanMeReplayAddress)

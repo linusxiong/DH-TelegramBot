@@ -102,4 +102,4 @@ def group_status(client, message):
                       "}\n账户已删除人数 - {}\n机器人人数 - {}\n无数据 - {} "
         sent_message.edit(
             status_info.format(message.chat.title, recently, within_week, within_month, long_time_ago, deleted_acc,
-                                   bot, uncached))
+                               bot, uncached))

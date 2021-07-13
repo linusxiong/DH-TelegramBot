@@ -13,7 +13,7 @@ def database_initialization(client, message):
         run_start = time()
         iter_chat = Client.iter_chat_members(self=client, chat_id=message.chat.id)
         if check_database(message.chat.id) and check_table(message.chat.id, AllGroupMemberDatabaseName):
-            print(Client.get_chat_members_count(self=client, chat_id=message.chat.id))
+            # print(Client.get_chat_members_count(self=client, chat_id=message.chat.id))
             all_group_member_list = []
             for members in iter_chat:
                 all_group_member_dict = {
@@ -25,11 +25,11 @@ def database_initialization(client, message):
                     'Joined_date': members.joined_date,
                     'Bot': members.user.is_bot
                 }
-                print(all_group_member_dict)
+                # print(all_group_member_dict)
                 all_group_member_list.append(all_group_member_dict)
             write_data(AllGroupMemberDatabaseName, message.chat.id, all_group_member_list)
         run_end = time()
-        print(run_end - run_start)
+        # print(run_end - run_start)
         send_message.edit("**初始化完成, 总耗时{}秒**".format(int(run_end - run_start)))
     else:
         reply_message = message.reply_text("**❗用户权限不足**")
