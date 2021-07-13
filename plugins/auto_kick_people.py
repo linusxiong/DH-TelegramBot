@@ -23,7 +23,7 @@ def auto_kick(client, message):
                         sleep(1)
                     except (ChatAdminRequired, UserAdminInvalid):
                         sent_message.edit("❗**无管理权限，请授予管理权限**")
-                        sleep(1)
+                        sleep(5)
                         # client.leave_chat(message.chat.id)
                         break
                     except FloodWait as e:
@@ -54,7 +54,7 @@ def kick_deleted(client, message):
                     sleep(1)
                 except (ChatAdminRequired, UserAdminInvalid):
                     sent_message.edit("❗**无管理权限，请授予管理权限**")
-                    sleep(1)
+                    sleep(5)
                     # client.leave_chat(message.chat.id)
                     break
                 except FloodWait as wait:
