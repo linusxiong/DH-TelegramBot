@@ -41,7 +41,13 @@ def write_data(database_name, chat_id, data):
     table.insert_many(data)
 
 
-def update_data(database_name, chat_id, data):
+def update_data(database_name, chat_id, data, data_filter):
     database = client[str(database_name)]
     table = database[str(chat_id)]
-    table.update_many(data)
+    table.update_one(data_filter, data)
+
+
+def find_data(database_name, chat_id, data_filter):
+    database = client[str(database_name)]
+    table = database[str(chat_id)]
+    return table.find_one(data_filter)
