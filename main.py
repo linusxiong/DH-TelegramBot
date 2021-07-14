@@ -8,7 +8,7 @@ plugins = dict(
         "init_database",
         "help",
         "banme",
-        "other",
+        "widget",
         "check_in"
     ]
 )

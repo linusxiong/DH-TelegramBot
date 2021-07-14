@@ -1,13 +1,14 @@
 import random
-from time import time, sleep
+from time import time
 from pyrogram import Client, filters
-from pyrogram.errors import ChatAdminRequired, MessageDeleteForbidden, UserAdminInvalid
+from pyrogram.errors import ChatAdminRequired, UserAdminInvalid
 from pyrogram.types import ChatPermissions
-
 from config import BanMeReplayAddress, BOT_NAME
+from others.package import check_delete_message_right
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['banme', 'banme@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(
+    filters.incoming & ~filters.private & filters.command(['banme', 'banme@{bot_name}'.format(bot_name=BOT_NAME)]))
 def banme(client, message):
     random_time = random.randint(100, 500)
     block_time = int(time() + random_time)
@@ -21,22 +22,14 @@ def banme(client, message):
         message.reply_text("❗**查询不到用户信息**")
     else:
         user = client.get_chat_member(message.chat.id, message.from_user.id)
-        try:
-            if user.status in ('administrator', 'creator'):
-                reply_message = message.reply_photo(photo=BanMeReplayAddress)
-                # 自动删除信息
-                sleep(5)
-                message.delete()
-                reply_message.delete()
-        except MessageDeleteForbidden:
-                reply_message.edit("❗**无删除用户信息权限，请授予管理权限**")
+
+        if user.status in ('administrator', 'creator'):
+            reply_message = message.reply_photo(photo=BanMeReplayAddress)
+            check_delete_message_right(message, reply_message, send_message=None)
         else:
             try:
                 send_message = message.reply_text("恭喜您获得" + str(random_time) + "秒禁言时间")
                 client.restrict_chat_member(message.chat.id, message.from_user.id, permission, block_time)
             except (ChatAdminRequired, UserAdminInvalid):
-                send_message.edit("❗**无管理权限，请授予管理权限**")
-            # 自动删除信息
-            sleep(5)
-            message.delete()
-            send_message.delete()
+                send_message.edit("❗**无权限，请授予相应权限**")
+                check_delete_message_right(message, None, send_message)

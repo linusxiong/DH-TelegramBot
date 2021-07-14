@@ -4,21 +4,47 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 help_message = [
     ".",
 
-    "**DH-Bot**\n使用前先给予DH-Bot管理员权限\n"
-    "/auto_hick 根据输入指令自动踢出\n/status 展示群内成员状态\n/kick_deleted 自动删除群内已删除账户"
+    "**DH-Bot**"
+    "\n使用前先给予DH-Bot管理员权限"
+    "\n使用机器人之前请先在**群组内**进行初始化操作"
+    "\n```/init``` 初始化"
+    "\n不进行初始化操作将无法使用群组内签到等功能"
+    "\n下一页查看所有指令",
+
+    "**Command**"
+    "\n```/init``` 初始化"
+    "\n```/auto_hick``` 根据输入指令自动踢出"
+    "\n```/status``` 展示群内成员状态"
+    "\n```/kick_deleted``` 自动删除群内已删除账户"
+    "\n```/group_status``` 获取群组状态"
+    "\n```/kick_deleted``` 删除群组中所有已删除账户"
+    "\n```/banme``` 获得随机封禁时长"
+    "\n/dc 查询Datacenter位置"
+    "\n/queryid 查询用户ID"
+    "\n/ping 存活测试"
+    "\n```/check_in``` 签到(根据群组)"
+    "\n```/auto_kick``` (arguments)"
     "\n\n下一页查看详细指令用法",
 
-    "**Command**\n/status - 获取群组状态"
-    "\n/kick_deleted - 删除群组中所有已删除账户"
-    "\n/auto_kick (arguments)"
-    "\n\n**Arguments**\n“online” - 删除在线用户\n“offline” - 踢出所有在线用户\n“recently” - 踢出最近3天内未上线用户(慎重)\n“within_week” - 踢出2-3天或者一星期内未上线用户"
-    "\n“within_month” - 踢出6-7天或者一个月内未上线用户\n“long_time_ago” - 踢出超过一个月未上线用户"
+
+    "**Arguments**"
+    "\n“online” - 删除在线用户"
+    "\n“offline” - 踢出所有在线用户"
+    "\n“recently” - 踢出最近3天内未上线用户(慎重)"
+    "\n“within_week” - 踢出2-3天或者一星期内未上线用户 "
+    "\n“within_month” - 踢出6-7天或者一个月内未上线用户"
+    "\n“long_time_ago” - 踢出超过一个月未上线用户"
     "\n\n下一页查看例子",
 
-    "**Examples**\n```/auto_kick long_time_ago``` - 删除超过一个月未登录用户\n```/kick_deleted``` - 踢出已删除账户\n```/status``` - 查看群内用户状态",
+    "**Examples**"
+    "\n```/auto_kick long_time_ago``` - 删除超过一个月未登录用户"
+    "\n```/kick_deleted``` - 踢出已删除账户"
+    "\n```/status``` - 查看群内用户状态",
 
     "**Developer - @dalao2333**"
 ]
+
+
 start_message = "**尊敬的用户 [{}](tg://user?id={})**\n欢迎使用DH-Bot，更多查看 /help"
 
 

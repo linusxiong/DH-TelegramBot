@@ -36,4 +36,4 @@ def database_initialization(client, message):
             # print(run_end - run_start)
             send_message.edit("**初始化完成, 总耗时{0:.2f}秒**".format(run_end - run_start))
         else:
-            reply_message = message.reply_text("**❗用户权限不足**")
+            message.reply_text("**❗用户权限不足**")
