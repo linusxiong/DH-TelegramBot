@@ -16,7 +16,6 @@ def database_initialization(client, message):
             run_start = time()
             iter_chat = Client.iter_chat_members(self=client, chat_id=message.chat.id)
             if check_database(message.chat.id) and check_table(message.chat.id, AllGroupMemberDatabaseName):
-                # print(Client.get_chat_members_count(self=client, chat_id=message.chat.id))
                 all_group_member_list = []
                 for members in iter_chat:
                     all_group_member_dict = {
@@ -29,7 +28,6 @@ def database_initialization(client, message):
                         'Bot': members.user.is_bot,
                         "Last_check_in_data": None
                     }
-                    # print(all_group_member_dict)
                     all_group_member_list.append(all_group_member_dict)
                 write_data(AllGroupMemberDatabaseName, message.chat.id, all_group_member_list)
             run_end = time()

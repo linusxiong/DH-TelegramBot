@@ -16,8 +16,8 @@ def user_check_in(client, message):
         filter_find = {
             "ID": message.from_user.id
         }
-        if check_database is False:
-            message.reply_text("❗**请先进行/init初始化操作**")
+        if check_database is not False:
+            message.reply_text("❗**请先进行```/init```初始化操作**")
         else:
             if find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find)['Last_check_in_data'] is None:
                 update_group_member = {

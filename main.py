@@ -1,4 +1,4 @@
-from config import TOKEN, BanMeReplayAddress, api_id, api_hash
+from config import TOKEN, api_id, api_hash
 from pyrogram import Client
 
 plugins = dict(
@@ -19,5 +19,5 @@ app = Client(
     api_hash=api_hash,
     plugins=plugins
 )
-
 app.run()
+

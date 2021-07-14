@@ -1,6 +1,4 @@
-from time import sleep
 from pyrogram import Client, filters
-from pyrogram.errors import MessageDeleteForbidden
 from others.package import check_delete_message_right
 from config import BOT_NAME
 
@@ -8,11 +6,8 @@ from config import BOT_NAME
 # 存活性测试
 @Client.on_message(filters.incoming & filters.command(['ping', 'ping@{bot_name}'.format(bot_name=BOT_NAME)]))
 def ping(client, message):
-    if message.from_user is None:
-        message.reply_text("❗**查询不到用户信息**")
-    else:
-        send_message = message.reply_text("🏓️")
-        check_delete_message_right(message, None, send_message)
+    send_message = message.reply_text("🏓️")
+    check_delete_message_right(message, None, send_message)
 
 
 # 查询用户ID
