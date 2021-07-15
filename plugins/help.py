@@ -13,12 +13,13 @@ help_message = [
 
     "**Command**"
     "\n```/init``` 初始化"
+    "\n```/update``` 更新群组数据库"
     "\n```/auto_hick``` 根据输入指令自动踢出"
     "\n```/status``` 展示群内成员状态"
-    "\n```/kick_deleted``` 自动删除群内已删除账户"
     "\n```/group_status``` 获取群组状态"
     "\n```/kick_deleted``` 删除群组中所有已删除账户"
     "\n```/banme``` 获得随机封禁时长"
+    "\n```/ip``` 查询IP信息(arguments)"
     "\n/dc 查询Datacenter位置"
     "\n/queryid 查询用户ID"
     "\n/ping 存活测试"
@@ -39,6 +40,7 @@ help_message = [
     "**Examples**"
     "\n```/auto_kick long_time_ago``` - 删除超过一个月未登录用户"
     "\n```/kick_deleted``` - 踢出已删除账户"
+    "\n ```/ip 8.8.8.8``` - 查询8.8.8.8的信息"
     "\n```/status``` - 查看群内用户状态",
 
     "**Developer - @dalao2333**"
