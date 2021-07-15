@@ -7,7 +7,7 @@ client = pymongo.MongoClient('mongodb://localhost:27017/')
 
 def check_database(chat_id):
     database_list = client.list_database_names()
-    if chat_id in database_list:
+    if str(chat_id) in database_list:
         error_code.return_error(1001)
         return False
     else:
