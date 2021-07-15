@@ -5,14 +5,14 @@ from config import BOT_NAME
 
 # 存活性测试
 @Client.on_message(filters.incoming & filters.command(['ping', 'ping@{bot_name}'.format(bot_name=BOT_NAME)]))
-def ping(client, message):
+def ping(message):
     send_message = message.reply_text("🏓️")
     check_delete_message_right(message, None, send_message)
 
 
 # 查询用户ID
 @Client.on_message(filters.incoming & filters.command(['queryid', 'queryid@{bot_name}'.format(bot_name=BOT_NAME)]))
-def query_id(client, message):
+def query_id(message):
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
     else:
@@ -25,7 +25,7 @@ def query_id(client, message):
 
 # 查询用户数据中心
 @Client.on_message(filters.incoming & filters.command(['dc', 'dc@{bot_name}'.format(bot_name=BOT_NAME)]))
-def query_user_id(client, message):
+def query_user_id(message):
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
     else:

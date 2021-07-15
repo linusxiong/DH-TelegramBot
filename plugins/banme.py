@@ -22,7 +22,6 @@ def banme(client, message):
         message.reply_text("❗**查询不到用户信息**")
     else:
         user = client.get_chat_member(message.chat.id, message.from_user.id)
-
         if user.status in ('administrator', 'creator'):
             reply_message = message.reply_photo(photo=BanMeReplayAddress)
             check_delete_message_right(message, reply_message, send_message=None)

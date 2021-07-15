@@ -17,7 +17,7 @@ def check_database(chat_id):
 def check_table(chat_id, database_name):
     database = client[str(database_name)]
     table = database.list_collection_names()
-    if chat_id in table:
+    if str(chat_id) in table:
         error_code.return_error(1002)
         return False
     else:
@@ -41,7 +41,7 @@ def write_data(database_name, chat_id, data):
     table.insert_many(data)
 
 
-def update_data(database_name, chat_id, data, data_filter):
+def update_data_one(database_name, chat_id, data, data_filter):
     database = client[str(database_name)]
     table = database[str(chat_id)]
     table.update_one(data_filter, data)
