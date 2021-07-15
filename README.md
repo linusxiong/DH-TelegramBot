@@ -1,4 +1,4 @@
-# **DH-Bot**
+# **DH-TelegramBot**
 使用前先给予DH-Bot管理员权限  
 使用机器人之前请先在**群组内**进行初始化操作  
 ```/init``` 初始化  
@@ -38,3 +38,10 @@
 ```/auto_kick long_time_ago``` - 删除超过一个月未登录用户  
 ```/kick_deleted``` - 踢出已删除账户  
 ```/status``` - 查看群内用户状态  
+
+## TODO list
+- [ ] 增加前端控制面板
+- [ ] 查询whois信息
+- [ ] 实现ping功能
+- [ ] 实现自定义DNS查询功能
+- [ ] 实现自定义查询DOH，DOT等
