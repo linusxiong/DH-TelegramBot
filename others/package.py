@@ -1,9 +1,16 @@
+from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 from pyrogram.errors import MessageDeleteForbidden
 
+executor = ThreadPoolExecutor(max_workers=40)
+
 
 def check_delete_message_right(message, reply_message, send_message):
-    wait_time = 30
+    executor.submit(work, message, reply_message, send_message)
+
+
+def work(message, reply_message, send_message):
+    wait_time = 10
     try:
         sleep(wait_time)
         message.delete()
