@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
@@ -21,7 +20,8 @@ def user_check_in(client, message):
             message.reply_text("❗**请先进行```/init```初始化操作**")
         else:
             # 如果'Last_check_in_data'字段为空则没签过到
-            last_check_in_data = find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find)['Last_check_in_data']
+            last_check_in_data = find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find)[
+                'Last_check_in_data']
             # 从未签过到
             if last_check_in_data is None:
                 update_group_member = {
@@ -34,8 +34,7 @@ def user_check_in(client, message):
                 }
                 update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
                 reply_message = message.reply_text(
-                    "[{}](tg://user?id={})签到成功".format(message.reply_to_message.from_user.first_name,
-                                                                  message.reply_to_message.from_user.id)
+                    "[{}](tg://user?id={})签到成功".format(message.from_user.first_name, message.from_user.id)
                 )
             # 已有签到数据
             if last_check_in_data is not None:
@@ -54,8 +53,7 @@ def user_check_in(client, message):
                     }
                     update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
                     reply_message = message.reply_text(
-                        "[{}](tg://user?id={})签到成功，上一次签到在{}天前".format(message.reply_to_message.from_user.first_name,
-                                                            message.reply_to_message.from_user.id, days)
+                        "[{}](tg://user?id={})签到成功，上一次签到在{}天前".format(message.from_user.first_name, message.from_user.id, days)
                     )
 
                     # 如果现在时间和签到时间未大于一天则重复签到
