@@ -9,7 +9,6 @@
 ```/init``` 初始化  
 ```/update``` 更新群组数据库  
 ```/auto_hick``` 根据输入指令自动踢出  
-```/status``` 展示群内成员状态  
 ```/group_status``` 获取群组状态  
 ```/kick_deleted``` 删除群组中所有已删除账户  
 ```/unban``` 解除封禁  
