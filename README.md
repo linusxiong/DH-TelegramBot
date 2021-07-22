@@ -12,8 +12,8 @@
 ```/status``` 展示群内成员状态  
 ```/group_status``` 获取群组状态  
 ```/kick_deleted``` 删除群组中所有已删除账户  
-```/unban``` 解除封禁
-```kick_people``` 永久踢除
+```/unban``` 解除封禁  
+```kick_people``` 永久踢除  
 ```/banme``` 获得随机封禁时长  
 ```/dc``` 查询Datacenter位置  
 ```/queryid``` 查询用户ID  
