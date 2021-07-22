@@ -28,6 +28,7 @@ def query_id(client, message):
 # 查询用户数据中心
 @Client.on_message(filters.incoming & filters.command(['dc', 'dc@{bot_name}'.format(bot_name=BOT_NAME)]))
 def query_user_id(client, message):
+    print(message)
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
     else:
@@ -80,3 +81,8 @@ def query_ip_information(client, message):
     else:
         reply_message = message.reply_text("请检查输入格式是否为IPv4")
         check_delete_message_right(message, reply_message, None)
+
+# # 查询WHOIS
+# @Client.on_message(filters.incoming & filters.command(['whois', 'whois@{bot_name}'.format(bot_name=BOT_NAME)]))
+# def query_whois(client, message):
+#

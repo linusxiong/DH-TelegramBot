@@ -1,4 +1,8 @@
-from time import time
+
+from datetime import datetime, timedelta
+from time import time, localtime, strftime
+
+import time
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
 from others.operational_database import update_data_one, find_data, check_database, check_table
@@ -7,7 +11,7 @@ from others.package import check_delete_message_right
 
 @Client.on_message(filters.incoming & filters.command(['check_in', 'check_in@{bot_name}'.format(bot_name=BOT_NAME)]))
 def user_check_in(client, message):
-    now_time = time()
+    now_time = datetime.timestamp(datetime.now())
     # 防止匿名签到，因为读不到信息
     if message.from_user is None:
         reply_message = message.reply_text("❗**查询不到用户信息**")
@@ -20,7 +24,9 @@ def user_check_in(client, message):
             message.reply_text("❗**请先进行```/init```初始化操作**")
         else:
             # 如果'Last_check_in_data'字段为空则没签过到
-            if find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find)['Last_check_in_data'] is None:
+            last_check_in_data = find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find)['Last_check_in_data']
+            # 从未签过到
+            if last_check_in_data is None:
                 update_group_member = {
                     "$set": {
                         "Last_check_in_data": now_time
@@ -30,7 +36,32 @@ def user_check_in(client, message):
                     "ID": message.from_user.id
                 }
                 update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
-                reply_message = message.reply_text("签到成功_试运行")
-            else:
-                reply_message = message.reply_text("**您今天已经签过到了**")
+                reply_message = message.reply_text(
+                    "[{}](tg://user?id={})签到成功".format(message.reply_to_message.from_user.first_name,
+                                                                  message.reply_to_message.from_user.id)
+                )
+            # 已有签到数据
+            if last_check_in_data is not None:
+                now = datetime.fromtimestamp(now_time)
+                last = datetime.fromtimestamp(last_check_in_data)
+                days = (now - last).days
+                # 如果现在时间和签到时间相差大于或等于1则表明当天未签到
+                if days >= 1:
+                    update_group_member = {
+                        "$set": {
+                            "Last_check_in_data": now_time
+                        }
+                    }
+                    update_filter = {
+                        "ID": message.from_user.id
+                    }
+                    update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
+                    reply_message = message.reply_text(
+                        "[{}](tg://user?id={})签到成功，上一次签到在{}天前".format(message.reply_to_message.from_user.first_name,
+                                                            message.reply_to_message.from_user.id, days)
+                    )
+
+                    # 如果现在时间和签到时间未大于一天则重复签到
+                elif days == 0:
+                    reply_message = message.reply_text("**您今天已经签过到了**")
             check_delete_message_right(message, reply_message, send_message=None)
