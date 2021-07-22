@@ -1,8 +1,8 @@
+import re
 from pyrogram import Client, filters
 from others.package import check_delete_message_right
 from config import BOT_NAME
 import requests
-import re
 
 
 # 存活性测试
@@ -28,7 +28,6 @@ def query_id(client, message):
 # 查询用户数据中心
 @Client.on_message(filters.incoming & filters.command(['dc', 'dc@{bot_name}'.format(bot_name=BOT_NAME)]))
 def query_user_id(client, message):
-    print(message)
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
     else:
