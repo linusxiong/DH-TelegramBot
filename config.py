@@ -15,3 +15,4 @@ else:
     api_hash = ''
     BOT_NAME = ''
     AllGroupMemberDatabaseName = ''
+    AUTO_DELETE = False
