@@ -5,7 +5,7 @@ from others.operational_database import write_data, check_database, check_table,
 
 
 @Client.on_message(
-    filters.incoming & ~filters.private & filters.command(['init', 'init@{bot_name}'.format(bot_name=BOT_NAME)]))
+    filters.incoming & ~filters.private & filters.command(['init', f'init@{BOT_NAME}']))
 def database_initialization(client, message):
     # 防止匿名用户操作报错
     if message.from_user is None:
@@ -26,14 +26,14 @@ def database_initialization(client, message):
                     all_group_member_list = []
                     for members in iter_chat:
                         all_group_member_dict = {
-                            "ID": members.user.id,
+                            'ID': members.user.id,
                             'Username': members.user.username,
                             'Status': members.user.status,
                             'Identity': members.status,
                             'Until_date': members.until_date,
                             'Joined_date': members.joined_date,
                             'Bot': members.user.is_bot,
-                            "Last_check_in_data": None
+                            'Last_check_in_data': None
                         }
                         all_group_member_list.append(all_group_member_dict)
                     write_data(AllGroupMemberDatabaseName, message.chat.id, all_group_member_list)
@@ -44,7 +44,7 @@ def database_initialization(client, message):
 
 
 @Client.on_message(
-    filters.incoming & ~filters.private & filters.command(['update', 'update@{bot_name}'.format(bot_name=BOT_NAME)]))
+    filters.incoming & ~filters.private & filters.command(['update', f'update@{BOT_NAME}']))
 def update_group_member(client, message):
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
@@ -66,6 +66,7 @@ def update_group_member(client, message):
                         'Until_date': members.until_date,
                         'Joined_date': members.joined_date,
                         'Bot': members.user.is_bot,
+                        'Last_check_in_data': None
                     }
                     update_data = {
                         "$set": update_dict

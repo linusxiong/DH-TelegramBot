@@ -5,7 +5,7 @@ from others.operational_database import update_data_one, find_data, check_databa
 from others.package import check_delete_message_right
 
 
-@Client.on_message(filters.incoming & filters.command(['check_in', 'check_in@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & filters.command(['check_in', f'check_in@{BOT_NAME}']))
 def user_check_in(client, message):
     now_time = datetime.timestamp(datetime.now())
     # 防止匿名签到，因为读不到信息
@@ -34,7 +34,7 @@ def user_check_in(client, message):
                 }
                 update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
                 reply_message = message.reply_text(
-                    "[{}](tg://user?id={})签到成功".format(message.from_user.first_name, message.from_user.id)
+                    f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})签到成功"
                 )
             # 已有签到数据
             if last_check_in_data is not None:
@@ -53,7 +53,7 @@ def user_check_in(client, message):
                     }
                     update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
                     reply_message = message.reply_text(
-                        "[{}](tg://user?id={})签到成功，上一次签到在{}天前".format(message.from_user.first_name, message.from_user.id, days)
+                        f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})签到成功，上一次签到在{days}天前"
                     )
 
                     # 如果现在时间和签到时间未大于一天则重复签到

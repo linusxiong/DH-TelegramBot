@@ -6,14 +6,14 @@ import requests
 
 
 # 存活性测试
-@Client.on_message(filters.incoming & filters.command(['ping', 'ping@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & filters.command(['ping', f'ping@{BOT_NAME}']))
 def ping(client, message):
     send_message = message.reply_text("🏓️")
     check_delete_message_right(message, None, send_message)
 
 
 # 查询用户ID
-@Client.on_message(filters.incoming & filters.command(['queryid', 'queryid@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & filters.command(['queryid', f'queryid@{BOT_NAME}']))
 def query_id(client, message):
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
@@ -26,23 +26,24 @@ def query_id(client, message):
 
 
 # 查询用户数据中心
-@Client.on_message(filters.incoming & filters.command(['dc', 'dc@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & filters.command(['dc', f'dc@{BOT_NAME}']))
 def query_user_id(client, message):
     if message.from_user is None:
         message.reply_text("❗**查询不到用户信息**")
     else:
         if message.from_user.language_code == "zh-hans":
             reply_message = message.reply_text(
-                "[{}](tg://user?id={})的数据中心为：**DC{}**".format(message.from_user.username, message.from_user.id,
-                                                              str(message.from_user.dc_id)))
+                f"[{message.from_user.username}](tg://user?id={message.from_user.id})的数据中心为：**DC{str(message.from_user.dc_id)}**"
+            )
         else:
             reply_message = message.reply_text(
-                "Your Account Datacenter is: **DC{}**".format(str(message.from_user.dc_id)))
+                f"Your Account Datacenter is: **DC{str(message.from_user.dc_id)}**"
+            )
         check_delete_message_right(message, reply_message, send_message=None)
 
 
 # 查询IP信息
-@Client.on_message(filters.incoming & filters.command(['ip', 'ip@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & filters.command(['ip', f'ip@{BOT_NAME}']))
 def query_ip_information(client, message):
     url = 'https://api.ip.sb/geoip/'
     match = re.findall(r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b",
