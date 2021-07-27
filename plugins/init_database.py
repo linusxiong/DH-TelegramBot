@@ -1,8 +1,7 @@
 from time import time
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
-from others.operational_database import write_data, check_database, check_table, update_data_one, get_data_count, \
-    client, find_data
+from others.operational_database import write_data, check_database, check_table, update_data_one, get_data_count, client, find_data
 
 
 @Client.on_message(

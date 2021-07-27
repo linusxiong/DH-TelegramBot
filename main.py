@@ -8,8 +8,8 @@ plugins = dict(
         "init_database",
         "help",
         "banme",
+        "check_in",
         "widget",
-        "check_in"
     ]
 )
 app = Client(

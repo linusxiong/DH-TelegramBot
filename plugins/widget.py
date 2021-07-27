@@ -1,5 +1,9 @@
 import re
+from urllib.parse import urlparse
+
 from pyrogram import Client, filters
+
+from others.dns_lookup import https, tls, udp
 from others.package import check_delete_message_right
 from config import BOT_NAME
 import requests
@@ -73,7 +77,6 @@ def query_ip_information(client, message):
                          "\n**ASN**: [AS{asn} {asn_organization}](https://bgp.he.net/AS{asn})".format(**data)
 
                 reply_message = message.reply_text(result, parse_mode="markdown")
-                check_delete_message_right(message, reply_message, None)
             else:
                 reply_message = message.reply_text("请求失败，请重试")
                 check_delete_message_right(message, reply_message, None)
@@ -82,7 +85,18 @@ def query_ip_information(client, message):
         reply_message = message.reply_text("请检查输入格式是否为IPv4")
         check_delete_message_right(message, reply_message, None)
 
-# # 查询WHOIS
-# @Client.on_message(filters.incoming & filters.command(['whois', 'whois@{bot_name}'.format(bot_name=BOT_NAME)]))
-# def query_whois(client, message):
-#
+
+@Client.on_message(filters.incoming & filters.command(['doh', f'doh@{BOT_NAME}']))
+def doh_lookup(client, message):
+    match = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    for url in match:
+        url = url
+    if match:
+        reply = f"查询方法: {https(domain=url)['Method']}" \
+                f"\n域名: {https(domain=url)['Domain']}" \
+                f"\n查询服务器: {https(domain=url)['Nameserver']}" \
+                f"\n结果: {https(domain=url)['Answer']}"
+        send_message = message.reply_text(reply, parse_mode="markdown")
+    else:
+        reply_message = message.reply_text("请检查输入格式是否正确")
+
