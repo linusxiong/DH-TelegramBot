@@ -29,6 +29,7 @@ def banme(client, message):
             else:
                 send_message = message.reply_text("恭喜您获得" + str(random_time) + "秒禁言时间")
                 client.restrict_chat_member(message.chat.id, message.from_user.id, permission, block_time)
+                check_delete_message_right(message, None, send_message)
     except (ChatAdminRequired, UserAdminInvalid):
             send_message.edit("❗**无权限，请授予相应权限**")
             check_delete_message_right(message, None, send_message)

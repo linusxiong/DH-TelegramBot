@@ -7,7 +7,7 @@ from config import BOT_NAME
 from others.package import check_delete_message_right
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['auto_kick', 'auto_kick@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['auto_kick', f'auto_kick@{BOT_NAME}']))
 def auto_kick(client, message):
     if message.from_user is None:
         reply_message = message.reply_text("❗**查询不到用户信息**")
@@ -33,7 +33,7 @@ def auto_kick(client, message):
                         except FloodWait as e:
                             sleep(e.x)
                 try:
-                    sent_message.edit("✔️ **成功踢出{} 成员.**".format(count))
+                    sent_message.edit(f"✔️ **成功踢出{count} 成员.**")
                 except ChatWriteForbidden:
                     pass
             else:
@@ -42,7 +42,7 @@ def auto_kick(client, message):
             sent_message = message.reply_text("❗ **操作者必须为管理员身份**")
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['kick_deleted', 'kick_deleted@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['kick_deleted', f'kick_deleted@{BOT_NAME}']))
 def kick_deleted(client, message):
     if message.from_user is None:
         reply_message = message.reply_text("❗**查询不到用户信息**")
@@ -73,7 +73,7 @@ def kick_deleted(client, message):
             sent_message = message.reply_text("❗ **操作者必须为管理员身份**")
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['group_status', 'group_status@{bot_name}'.format(bot_name=BOT_NAME)]))
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['group_status', f'group_status@{BOT_NAME}']))
 def group_status(client, message):
     if message.from_user is None:
         reply_message = message.reply_text("❗**查询不到用户信息**")

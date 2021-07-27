@@ -51,3 +51,12 @@ def find_data(database_name, chat_id, data_filter):
     database = client[str(database_name)]
     table = database[str(chat_id)]
     return table.find_one(data_filter)
+
+
+def get_data_count(database_name, chat_id):
+    database = client[str(database_name)]
+    table = database[str(chat_id)]
+    return table.count()
+
+
+client.close()
