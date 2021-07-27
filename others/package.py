@@ -1,10 +1,32 @@
 from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 from pyrogram.errors import MessageDeleteForbidden
-
 from config import AUTO_DELETE
+import threading
+from plugins.error_code import return_error
 
 executor = ThreadPoolExecutor(max_workers=40)
+
+
+def callback_func():
+    return return_error(1006)
+
+
+def time_out(interval, callback=None):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            t = threading.Thread(target=func, args=args, kwargs=kwargs)
+            t.setDaemon(True)  # 设置主线程技术子线程立刻结束
+            t.start()
+            t.join(interval)  # 主线程阻塞等待interval秒
+            if t.is_alive() and callback:
+                return threading.Timer(0, callback).start()  # 立即执行回调函数
+            else:
+                return
+
+        return wrapper
+
+    return decorator
 
 
 def check_delete_message_right(message, reply_message, send_message):

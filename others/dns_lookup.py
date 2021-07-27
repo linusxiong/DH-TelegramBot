@@ -42,7 +42,7 @@ def https(domain, nameserver=None, port=None):
         nameserver = 'https://223.5.5.5/dns-query'
     if port is None:
         port = 443
-    if re.match(r'^https?:/{2}\w.+/dns-query$', nameserver):
+    try:
         with requests.sessions.Session() as session:
             query = message.make_query(domain, rdatatype.A)
             response = dns.query.https(query, nameserver, port, session=session)
@@ -58,7 +58,7 @@ def https(domain, nameserver=None, port=None):
                 'Answer': answer_list
             }
             return https_answer_dict
-    else:
+    except requests.exceptions.MissingSchema:
         return return_error(1005)
 
 

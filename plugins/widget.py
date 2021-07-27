@@ -1,10 +1,7 @@
 import re
-from urllib.parse import urlparse
-
 from pyrogram import Client, filters
-
 from others.dns_lookup import https, tls, udp
-from others.package import check_delete_message_right
+from others.package import check_delete_message_right, time_out, callback_func
 from config import BOT_NAME
 import requests
 
@@ -76,7 +73,7 @@ def query_ip_information(client, message):
                          "\n**运营商**: {isp}" \
                          "\n**ASN**: [AS{asn} {asn_organization}](https://bgp.he.net/AS{asn})".format(**data)
 
-                reply_message = message.reply_text(result, parse_mode="markdown")
+                send_message = client.send_message(chat_id=message.chat.id, text=result, parse_mode="markdown")
             else:
                 reply_message = message.reply_text("请求失败，请重试")
                 check_delete_message_right(message, reply_message, None)
@@ -88,15 +85,65 @@ def query_ip_information(client, message):
 
 @Client.on_message(filters.incoming & filters.command(['doh', f'doh@{BOT_NAME}']))
 def doh_lookup(client, message):
-    match = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
-    for url in match:
-        url = url
-    if match:
-        reply = f"查询方法: {https(domain=url)['Method']}" \
-                f"\n域名: {https(domain=url)['Domain']}" \
-                f"\n查询服务器: {https(domain=url)['Nameserver']}" \
-                f"\n结果: {https(domain=url)['Answer']}"
-        send_message = message.reply_text(reply, parse_mode="markdown")
+    match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    match_nameserver = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+/dns-query', message.text)
+    if match_url:
+        url = match_url[1]
+        nameserver = None
+        if match_nameserver:
+            nameserver = match_nameserver[0]
+        lookup = https(domain=url, nameserver=nameserver)
+        answer = '\n'.join(map(str, lookup['Answer']))
+        reply = f"**查询方法**: {lookup['Method']}" \
+                f"\n**域名**: \n{lookup['Domain']}" \
+                f"\n**查询服务器**: \n{lookup['Nameserver']}" \
+                f"\n**结果**: \n{answer}"
+        send_message = client.send_message(chat_id=message.chat.id, text=reply, parse_mode="markdown")
     else:
         reply_message = message.reply_text("请检查输入格式是否正确")
+        check_delete_message_right(message, reply_message, None)
 
+
+@Client.on_message(filters.incoming & filters.command(['dot', f'dot@{BOT_NAME}']))
+def dot_lookup(client, message):
+    match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    match_nameserver = re.findall(r'tls://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    if match_url:
+        url = match_url[1]
+        nameserver = None
+        if match_nameserver:
+            nameserver = match_nameserver[0]
+        lookup = tls(domain=url, nameserver=nameserver)
+        answer = '\n'.join(map(str, lookup['Answer']))
+        reply = f"**查询方法**: {lookup['Method']}" \
+                f"\n**域名**: \n{lookup['Domain']}" \
+                f"\n**查询服务器**: \n{lookup['Nameserver']}" \
+                f"\n**结果**: \n{answer}"
+        send_message = client.send_message(chat_id=message.chat.id, text=reply, parse_mode="markdown")
+    else:
+        reply_message = message.reply_text("请检查输入格式是否正确")
+        check_delete_message_right(message, reply_message, None)
+
+
+@Client.on_message(filters.incoming & filters.command(['udp', f'udp@{BOT_NAME}']))
+@time_out(2, callback_func)
+def udp_lookup(client, message):
+    match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    match_nameserver = re.findall(r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?["
+                                  r"0-9][0-9]?)\b",
+                                  message.text)
+    if match_url:
+        url = match_url[1]
+        nameserver = None
+        if match_nameserver:
+            nameserver = match_nameserver[0]
+        lookup = udp(domain=url, nameserver=nameserver)
+        answer = '\n'.join(map(str, lookup['Answer']))
+        reply = f"**查询方法**: {lookup['Method']}" \
+                f"\n**域名**: \n{lookup['Domain']}" \
+                f"\n**查询服务器**: \n{lookup['Nameserver']}" \
+                f"\n**结果**: \n{answer}"
+        send_message = client.send_message(chat_id=message.chat.id, text=reply, parse_mode="markdown")
+    else:
+        reply_message = message.reply_text("请检查输入格式是否正确")
+        check_delete_message_right(message, reply_message, None)
