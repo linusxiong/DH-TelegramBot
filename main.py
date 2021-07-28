@@ -9,8 +9,7 @@ plugins = dict(
         "help",
         "banme",
         "check_in",
-        "widget",
-        "test"
+        "widget"
     ]
 )
 app = Client(
