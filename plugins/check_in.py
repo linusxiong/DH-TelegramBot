@@ -1,8 +1,9 @@
 from datetime import datetime
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
-from others.operational_database import update_data_one, find_data, check_database, check_table
+from others.operational_database import update_data_one, find_data, check_database, check_table, mongodb_client
 from others.package import check_delete_message_right
+
 
 @Client.on_message(filters.incoming & ~filters.private & filters.command(['check_in', f'check_in@{BOT_NAME}']))
 def user_check_in(client, message):
@@ -59,3 +60,4 @@ def user_check_in(client, message):
                 elif days == 0:
                     reply_message = message.reply_text("**您今天已经签过到了**")
             check_delete_message_right(message, reply_message, send_message=None)
+    mongodb_client.close()

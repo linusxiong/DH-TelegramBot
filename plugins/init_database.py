@@ -1,7 +1,9 @@
 from time import time
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
-from others.operational_database import write_data, check_database, check_table, update_data_one, get_data_count, find_data
+
+
+from others.operational_database import write_data, check_database, check_table, update_data_one, get_data_count, find_data, mongodb_client
 
 
 @Client.on_message(
@@ -38,6 +40,7 @@ def database_initialization(client, message):
                         all_group_member_list.append(all_group_member_dict)
                     write_data(AllGroupMemberDatabaseName, message.chat.id, all_group_member_list)
                 run_end = time()
+                mongodb_client.close()
                 send_message.edit("**初始化完成, 总耗时{0:.2f}秒**".format(run_end - run_start))
             else:
                 message.reply_text("**❗用户权限不足**")
@@ -52,7 +55,6 @@ def update_group_member(client, message):
         user_check = client.get_chat_member(message.chat.id, message.from_user.id)
         if user_check.status in ('administrator', 'creator'):
             send_message = message.reply_text("**数据更新中**")
-            iter_chat = Client.iter_chat_members(self=client, chat_id=message.chat.id)
             if check_database(message.chat.id) and check_table(message.chat.id, AllGroupMemberDatabaseName) is False:
                 group_member_count = client.get_chat_members_count(message.chat.id)
                 database_member_count = get_data_count(AllGroupMemberDatabaseName, message.chat.id)
@@ -83,6 +85,7 @@ def update_group_member(client, message):
                             all_group_member_list.append(all_group_member_dict)
                             write_data(AllGroupMemberDatabaseName, message.chat.id, all_group_member_list)
                     update_end = time()
+                    mongodb_client.close()
                     send_message = message.reply_text("**初始化完成, 总耗时{0:.2f}秒**".format(update_end - update_start))
             else:
                 send_message.edit("**数据未初始化，请先初始化**")

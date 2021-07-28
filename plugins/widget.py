@@ -84,6 +84,7 @@ def query_ip_information(client, message):
 
 
 @Client.on_message(filters.incoming & filters.command(['doh', f'doh@{BOT_NAME}']))
+@time_out(2, callback_func)
 def doh_lookup(client, message):
     match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
     match_nameserver = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+/dns-query', message.text)
@@ -105,14 +106,18 @@ def doh_lookup(client, message):
 
 
 @Client.on_message(filters.incoming & filters.command(['dot', f'dot@{BOT_NAME}']))
+@time_out(2, callback_func)
 def dot_lookup(client, message):
     match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
-    match_nameserver = re.findall(r'tls://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    match_tls = re.findall(r'tls://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
+    match_ip = re.findall(r'\d+.\d+.\d+.\d+', message.text)
     if match_url:
         url = match_url[1]
         nameserver = None
-        if match_nameserver:
-            nameserver = match_nameserver[0]
+        if match_tls:
+            nameserver = match_tls[0]
+        if match_ip:
+            nameserver = match_ip[0]
         lookup = tls(domain=url, nameserver=nameserver)
         answer = '\n'.join(map(str, lookup['Answer']))
         reply = f"**查询方法**: {lookup['Method']}" \
