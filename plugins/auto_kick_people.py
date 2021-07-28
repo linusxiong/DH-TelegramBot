@@ -106,8 +106,16 @@ def group_status(client, message):
                 else:
                     uncached += 1
 
-            status_info = "**{}\n成员状态**\n\n```最近在线``` - {}\n```近一周在线人数``` - {}\n```近一月在线人数``` - {}\n```很久未上线人数``` - {" \
-                          "}\n账户已删除人数 - {}\n机器人人数 - {}\n无数据 - {} "
             sent_message.edit(
-                status_info.format(message.chat.title, recently, within_week, within_month, long_time_ago, deleted_acc,
-                                   bot, uncached))
+                "**群组信息**\n"
+                f"名称: {message.chat.title}\n"
+                f"ID: ```{message.chat.id}```\n\n"
+                "**成员状态**\n"
+                f"最近在线 - {recently}\n"
+                f"近一周在线人数 - {within_week}\n"
+                f"近一月在线人数 - {within_month}\n"
+                f"很久未上线人数 - {long_time_ago}\n"
+                f"账户已删除人数 - {deleted_acc}\n"
+                f"机器人人数 - {bot}\n"
+                f"无数据 - {uncached} "
+            )
