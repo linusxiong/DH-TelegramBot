@@ -1,5 +1,5 @@
-from config import TOKEN, api_id, api_hash
 from pyrogram import Client
+from config import TOKEN, api_id, api_hash
 
 plugins = dict(
     root="plugins",

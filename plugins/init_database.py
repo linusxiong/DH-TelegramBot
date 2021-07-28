@@ -60,7 +60,7 @@ def update_group_member(client, message):
                 if group_member_count > database_member_count:
                     new_count = group_member_count - database_member_count
                     send_message = message.reply_text(
-                        f"读取到{new_count}新用户数据，正在更新中"
+                        f"读取到**{new_count}**新用户数据，正在更新中"
                     )
 
                     iter_chat = Client.iter_chat_members(self=client, chat_id=message.chat.id)
@@ -86,6 +86,8 @@ def update_group_member(client, message):
                     update_end = time()
                     mongodb_client.close()
                     send_message = message.reply_text("**初始化完成, 总耗时{0:.2f}秒**".format(update_end - update_start))
+                else:
+                    send_message.edit("**未查询到新用户数据**")
             else:
                 send_message.edit("**数据未初始化，请先初始化**")
 

@@ -83,14 +83,17 @@ def query_ip_information(client, message):
         check_delete_message_right(message, reply_message, None)
 
 
-@Client.on_message(filters.incoming & filters.command(['doh', f'doh@{BOT_NAME}']))
+@Client.on_message(filters.incoming & filters.private & filters.command(['doh', f'doh@{BOT_NAME}']))
+# 装饰器限制函数运行时间，防止堵塞
 @time_out(2, callback_func)
 def doh_lookup(client, message):
     match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
     match_nameserver = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+/dns-query', message.text)
+    # 匹配要解析的域名
     if match_url:
         url = match_url[1]
         nameserver = None
+        # 匹配域名服务器
         if match_nameserver:
             nameserver = match_nameserver[0]
         lookup = https(domain=url, nameserver=nameserver)
@@ -105,7 +108,8 @@ def doh_lookup(client, message):
         check_delete_message_right(message, reply_message, None)
 
 
-@Client.on_message(filters.incoming & filters.command(['dot', f'dot@{BOT_NAME}']))
+@Client.on_message(filters.incoming & filters.private & filters.command(['dot', f'dot@{BOT_NAME}']))
+# 装饰器限制函数运行时间，防止堵塞
 @time_out(2, callback_func)
 def dot_lookup(client, message):
     match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)
@@ -114,6 +118,7 @@ def dot_lookup(client, message):
     if match_url:
         url = match_url[1]
         nameserver = None
+        # 匹配tls链接格式
         if match_tls:
             nameserver = match_tls[0]
         if match_ip:
@@ -130,7 +135,8 @@ def dot_lookup(client, message):
         check_delete_message_right(message, reply_message, None)
 
 
-@Client.on_message(filters.incoming & filters.command(['udp', f'udp@{BOT_NAME}']))
+@Client.on_message(filters.incoming & filters.private & filters.command(['udp', f'udp@{BOT_NAME}']))
+# 装饰器限制函数运行时间，防止堵塞
 @time_out(2, callback_func)
 def udp_lookup(client, message):
     match_url = re.findall(r'(?:[-\w.]|(?:%[\da-fA-F]{2}))+', message.text)

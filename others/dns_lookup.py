@@ -2,6 +2,7 @@ import re
 import dns.query
 from dns import rdatatype, message
 import requests
+# dnspython会检查这个是否有安装，如果不安装运行不了
 import requests_toolbelt
 from urllib.parse import urlparse
 from plugins.error_code import return_error
@@ -39,7 +40,7 @@ def udp(domain, nameserver=None, port=None):
 
 def https(domain, nameserver=None, port=None):
     if nameserver is None:
-        nameserver = 'https://223.5.5.5/dns-query'
+        nameserver = 'https://8.8.8.8/dns-query'
     if port is None:
         port = 443
     try:
@@ -66,13 +67,14 @@ def tls(domain, port=None, nameserver=None):
     if port is None:
         port = 853
     if nameserver is None:
-        nameserver = "223.5.5.5"
+        nameserver = "8.8.8.8"
     if re.findall(r"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b",
                   nameserver):
         nameserver = nameserver
     else:
         parse_result = urlparse(nameserver)
         nameserver = parse_result.hostname
+        # TLS查询必须使用ip进行查询，所以要先调用udp查询
         nameserver = udp(nameserver)['Answer'][0].to_text()
 
     query = message.make_query(domain, rdatatype.A)
