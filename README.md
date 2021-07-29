@@ -20,6 +20,9 @@
 ```/check_in``` 签到(根据群组)  
 ```/auto_kick``` 自动踢除(arguments)  
 ```/ip``` 查询IP信息(arguments)  
+```/doh``` dns over https查询(arguments)  
+```/dot``` dns over tls查询(arguments)  
+```/udp``` udp查询(arguments)  
 
 ## **参数**
 
@@ -34,15 +37,23 @@
 ### ip
 后面接IP地址即可
 
+### DNS查询
+/dot domain https://nameserver/dns-query（Optional）
+/doh domain tls://your_nameserver（Optional）
+/udp domain nameserver（Optional）
+
 ## **例子**
 ```/ip 8.8.8.8``` - 查询8.8.8.8的信息  
 ```/auto_kick long_time_ago``` - 删除超过一个月未登录用户  
 ```/kick_deleted``` - 踢出已删除账户  
-```/status``` - 查看群内用户状态  
+```/group_status``` - 查看群内用户状态  
+```/dot www.google.com``` - dns over tls查询  
+```/doh www.google.com https://223.5.5.5/dns-query``` - dns over https查询  
+```/udp www.google.com``` - UDP查询  
 
 ## TODO list
 - [ ] 增加前端控制面板
 - [ ] 使用FastApi完成后端API
-- [ ] 实现ping功能
+- [ ] 使用logging完成日志系统
 - [x] 实现自定义DNS查询功能
 - [x] 实现自定义查询DOH，DOT等
