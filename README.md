@@ -42,7 +42,7 @@
 
 ## TODO list
 - [ ] 增加前端控制面板
-- [ ] 查询whois信息
+- [ ] 使用FastApi完成后端API
 - [ ] 实现ping功能
-- [ ] 实现自定义DNS查询功能
-- [ ] 实现自定义查询DOH，DOT等
+- [x] 实现自定义DNS查询功能
+- [x] 实现自定义查询DOH，DOT等
