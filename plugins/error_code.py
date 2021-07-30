@@ -6,7 +6,8 @@ def return_error(code):
         1003: {'code': 1003, 'message': "Data already exists"},
         1004: {'code': 1004, 'message': "Request error"},
         1005: {'code': 1005, 'message': "URL is invalid"},
-        1006: {'code': 1006, 'message': "Timeout"}
+        1006: {'code': 1006, 'message': "Timeout"},
+        1007: {'code': 1007, 'message': "Parameter error"}
     }
 
     return error_code.get(code, 1000)

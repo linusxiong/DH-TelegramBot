@@ -38,9 +38,9 @@
 后面接IP地址即可
 
 ### DNS查询
-/dot domain https://nameserver/dns-query（Optional）
-/doh domain tls://your_nameserver（Optional）
-/udp domain nameserver（Optional）
+```/dot domain https://nameserver/dns-query (Optional)```  
+```/doh domain tls://your_nameserver (Optional)```  
+```/udp domain nameserver (Optional)```  
 
 ## **例子**
 ```/ip 8.8.8.8``` - 查询8.8.8.8的信息  

@@ -58,3 +58,8 @@ def get_data_count(database_name, chat_id):
     table = database[str(chat_id)]
     return table.count()
 
+
+def delete_data_one(database_name, chat_id, data_filter):
+    database = mongodb_client[str(database_name)]
+    table = database[str(chat_id)]
+    table.delete_one(data_filter)

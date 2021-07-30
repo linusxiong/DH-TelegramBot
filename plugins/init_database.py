@@ -1,7 +1,8 @@
 from time import time
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
-from others.operational_database import write_data, check_database, check_table, update_data_one, get_data_count, find_data, mongodb_client
+from others.operational_database import write_data, check_database, check_table, update_data_one, get_data_count, \
+    find_data, mongodb_client, delete_data_one
 
 
 @Client.on_message(
@@ -28,11 +29,11 @@ def database_initialization(client, message):
                         all_group_member_dict = {
                             'ID': members.user.id,
                             'Username': members.user.username,
-                            'Status': members.user.status,
+                            'User_status': members.user.status,
                             'Identity': members.status,
                             'Until_date': members.until_date,
                             'Joined_date': members.joined_date,
-                            'Bot': members.user.is_bot,
+                            'DC_id': members.user.dc_id,
                             'Last_check_in_data': None
                         }
                         all_group_member_list.append(all_group_member_dict)
@@ -53,7 +54,8 @@ def update_group_member(client, message):
         user_check = client.get_chat_member(message.chat.id, message.from_user.id)
         if user_check.status in ('administrator', 'creator'):
             send_message = message.reply_text("**数据更新中**")
-            if check_database(AllGroupMemberDatabaseName) is False and check_table(message.chat.id, AllGroupMemberDatabaseName) is False:
+            if check_database(AllGroupMemberDatabaseName) is False and check_table(message.chat.id,
+                                                                                   AllGroupMemberDatabaseName) is False:
                 update_start = time()
                 group_member_count = client.get_chat(message.chat.id).members_count
                 database_member_count = get_data_count(AllGroupMemberDatabaseName, message.chat.id)
@@ -93,3 +95,60 @@ def update_group_member(client, message):
 
         else:
             message.reply_text("**❗用户权限不足**")
+
+
+# 用户态检测
+@Client.on_chat_member_updated()
+def monitor_group_status(client, chat_member_updated):
+    new_info = chat_member_updated.new_chat_member
+    old_info = chat_member_updated.old_chat_member
+    chat = chat_member_updated.chat
+    print(old_info)
+    print("\n\n\n\n\n\n\n")
+    print(new_info)
+    if new_info and old_info is not None:
+
+        # 成员被移除
+        if new_info.status == 'kicked':
+            info_filter = {
+                'ID': new_info.user.id
+            }
+            delete_data_one(AllGroupMemberDatabaseName, chat.id, info_filter)
+            print("成员被移除")
+        # 新成员进入
+        if new_info.status == 'member' and old_info.status != 'restricted' and old_info.status != 'administrator':
+            new_group_member_dict = {
+                'ID': new_info.user.id,
+                'Username': new_info.user.username,
+                'User_status': new_info.user.status,
+                'Identity': new_info.status,
+                'Until_date': new_info.until_date,
+                'Joined_date': new_info.joined_date,
+                'DC_id': new_info.user.dc_id,
+                'Last_check_in_data': None
+            }
+            print("新成员进入")
+
+        # 成员被限制
+        if new_info.status == 'restricted' and old_info.status == 'member':
+            print("成员被限制")
+
+        # 成员已解禁
+        if new_info.status == 'member' and old_info.status == 'restricted' and old_info.restricted_by is not None:
+            print("成员已解禁")
+
+        if old_info.status == 'member' and new_info.status == 'administrator':
+            print("用户变更为管理")
+
+        if old_info.status == 'administrator' and new_info.status == 'member':
+            print("用户由管理变成成员")
+
+    if old_info is None:
+        # 成员自行退出再进入
+        if old_info is None and new_info.status == 'member':
+            print("新成员进入")
+
+    if new_info is None:
+        # 成员自行退出
+        if old_info.status == 'member' and new_info is None:
+            print("成员自己退出")
