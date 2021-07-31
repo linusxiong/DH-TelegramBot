@@ -142,7 +142,6 @@ def monitor_group_status(client, chat_member_updated):
                 'Last_check_in_data': None
             }
             asyncio.run(write_data_one(AllGroupMemberDatabaseName, chat.id, new_group_member_dict))
-            print("新成员进入")
 
     if new_info is None:
         # 成员自行退出
@@ -151,4 +150,3 @@ def monitor_group_status(client, chat_member_updated):
                 'ID': old_info.user.id
             }
             asyncio.run(delete_data_one(AllGroupMemberDatabaseName, chat.id, info_filter))
-            print("成员自己退出")
