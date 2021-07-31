@@ -1,7 +1,8 @@
+import asyncio
 from datetime import datetime
 from config import BOT_NAME, AllGroupMemberDatabaseName
 from pyrogram import Client, filters
-from others.operational_database import update_data_one, find_data, check_database, check_table, mongodb_client
+from others.operational_database import update_data_one, find_data, check_database, check_table
 from others.package import check_delete_message_right
 
 
@@ -20,7 +21,7 @@ def user_check_in(client, message):
             message.reply_text("❗**请先进行```/init```初始化操作**")
         else:
             # 如果'Last_check_in_data'字段为空则没签过到
-            last_check_in_data = find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find)[
+            last_check_in_data = asyncio.run(find_data(AllGroupMemberDatabaseName, message.chat.id, filter_find))[
                 'Last_check_in_data']
             # 从未签过到
             if last_check_in_data is None:
@@ -32,7 +33,7 @@ def user_check_in(client, message):
                 update_filter = {
                     "ID": message.from_user.id
                 }
-                update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
+                asyncio.run(update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter))
                 reply_message = message.reply_text(
                     f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})签到成功"
                 )
@@ -51,7 +52,7 @@ def user_check_in(client, message):
                     update_filter = {
                         "ID": message.from_user.id
                     }
-                    update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter)
+                    asyncio.run(update_data_one(AllGroupMemberDatabaseName, message.chat.id, update_group_member, update_filter))
                     reply_message = message.reply_text(
                         f"[{message.from_user.first_name}](tg://user?id={message.from_user.id})签到成功，上一次签到在{days}天前"
                     )
@@ -60,4 +61,3 @@ def user_check_in(client, message):
                 elif days == 0:
                     reply_message = message.reply_text("**您今天已经签过到了**")
             check_delete_message_right(message, reply_message, send_message=None)
-    mongodb_client.close()

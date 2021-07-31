@@ -6,13 +6,12 @@
 部署前请先配置```config.py```文件  
 
 ## **指令**
-```/init``` 初始化  
-```/update``` 更新群组数据库  
+```/init``` 初始化
 ```/auto_hick``` 根据输入指令自动踢出  
 ```/group_status``` 获取群组状态  
 ```/kick_deleted``` 删除群组中所有已删除账户  
 ```/unban``` 解除封禁  
-```kick_people``` 永久踢除  
+```/kick_people``` 永久踢除  
 ```/banme``` 获得随机封禁时长  
 ```/dc``` 查询Datacenter位置  
 ```/queryid``` 查询用户ID  
