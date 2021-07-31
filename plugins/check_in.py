@@ -6,7 +6,7 @@ from others.operational_database import update_data_one, find_data, check_databa
 from others.package import check_delete_message_right
 
 
-@Client.on_message(filters.incoming & ~filters.private & filters.command(['check_in', f'check_in@{BOT_NAME}']))
+@Client.on_message(filters.incoming & ~filters.private & filters.command(['checkin', 'check_in', f'check_in@{BOT_NAME}']))
 def user_check_in(client, message):
     now_time = datetime.timestamp(datetime.now())
     # 防止匿名签到，因为读不到信息
